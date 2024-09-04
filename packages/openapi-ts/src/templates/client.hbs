@@ -2,21 +2,21 @@
 import { NgModule} from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AngularHttpRequest } from './core/AngularHttpRequest';
-import { BaseHttpRequest } from './core/BaseHttpRequest';
-import type { OpenAPIConfig } from './core/OpenAPI';
-import { OpenAPI } from './core/OpenAPI';
-import { Interceptors } from './core/OpenAPI';
+import { AngularHttpRequest } from './core/AngularHttpRequest{{ext}}';
+import { BaseHttpRequest } from './core/BaseHttpRequest{{ext}}';
+import type { OpenAPIConfig } from './core/OpenAPI{{ext}}';
+import { OpenAPI } from './core/OpenAPI{{ext}}';
+import { Interceptors } from './core/OpenAPI{{ext}}';
 {{else}}
-import type { BaseHttpRequest } from './core/BaseHttpRequest';
-import type { OpenAPIConfig } from './core/OpenAPI';
-import { Interceptors } from './core/OpenAPI';
-import { {{{httpRequest}}} } from './core/{{{httpRequest}}}';
+import type { BaseHttpRequest } from './core/BaseHttpRequest{{ext}}';
+import type { OpenAPIConfig } from './core/OpenAPI{{ext}}';
+import { Interceptors } from './core/OpenAPI{{ext}}';
+import { {{{httpRequest}}} } from './core/{{{httpRequest}}}{{ext}}';
 {{/equals}}
 
 {{#if services}}
 {{#each services}}
-import { {{{transformServiceName name}}} } from './services.gen';
+import { {{{transformServiceName name}}} } from './services.gen{{ext}}';
 {{/each}}
 {{/if}}
 

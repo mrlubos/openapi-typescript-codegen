@@ -3,12 +3,12 @@ import fetch, { FormData, Headers } from 'node-fetch';
 import type { RequestInit, Response } from 'node-fetch';
 
 {{/equals}}
-import { ApiError } from './ApiError';
-import type { ApiRequestOptions } from './ApiRequestOptions';
-import type { ApiResult } from './ApiResult';
-import { CancelablePromise } from './CancelablePromise';
-import type { OnCancel } from './CancelablePromise';
-import type { OpenAPIConfig } from './OpenAPI';
+import { ApiError } from './ApiError{{ext}}';
+import type { ApiRequestOptions } from './ApiRequestOptions{{ext}}';
+import type { ApiResult } from './ApiResult{{ext}}';
+import { CancelablePromise } from './CancelablePromise{{ext}}';
+import type { OnCancel } from './CancelablePromise{{ext}}';
+import type { OpenAPIConfig } from './OpenAPI{{ext}}';
 
 {{>functions/isString}}
 

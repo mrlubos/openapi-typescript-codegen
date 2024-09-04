@@ -14,6 +14,7 @@ import type { Files } from '../types/utils';
 import { camelCase } from '../utils/camelCase';
 import { getConfig, isStandaloneClient } from '../utils/config';
 import { escapeComment, escapeName } from '../utils/escape';
+import { appendExt } from '../utils/extension';
 import { reservedWordsRegExp } from '../utils/reservedWords';
 import { transformServiceName } from '../utils/transform';
 import { setUniqueTypeName } from '../utils/type';
@@ -782,7 +783,7 @@ export const generateServices = async ({
     } else {
       files.services.import({
         asType: true,
-        module: './core/CancelablePromise',
+        module: appendExt('./core/CancelablePromise'),
         name: 'CancelablePromise',
       });
     }
@@ -790,7 +791,7 @@ export const generateServices = async ({
     if (config.services.response === 'response') {
       files.services.import({
         asType: true,
-        module: './core/ApiResult',
+        module: appendExt('./core/ApiResult'),
         name: 'ApiResult',
       });
     }
@@ -798,17 +799,17 @@ export const generateServices = async ({
     if (config.name) {
       files.services.import({
         asType: config.client.name !== 'angular',
-        module: './core/BaseHttpRequest',
+        module: appendExt('./core/BaseHttpRequest'),
         name: 'BaseHttpRequest',
       });
     } else {
       files.services.import({
-        module: './core/OpenAPI',
+        module: appendExt('./core/OpenAPI'),
         name: 'OpenAPI',
       });
       files.services.import({
         alias: '__request',
-        module: './core/request',
+        module: appendExt('./core/request'),
         name: 'request',
       });
     }
@@ -844,7 +845,7 @@ export const generateServices = async ({
         files.services.import({
           // this detection could be done safer, but it shouldn't cause any issues
           asType: !imported.endsWith('Transformer'),
-          module: `./${files.types.getName(false)}`,
+          module: appendExt(`./${files.types.getName(false)}`),
           name: imported,
         });
       },

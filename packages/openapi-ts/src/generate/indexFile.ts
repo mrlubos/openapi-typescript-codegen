@@ -1,6 +1,7 @@
 import { compiler, TypeScriptFile } from '../compiler';
 import type { Files } from '../types/utils';
 import { getConfig } from '../utils/config';
+import { appendExt } from '../utils/extension';
 
 export const generateIndexFile = async ({
   files,
@@ -18,7 +19,7 @@ export const generateIndexFile = async ({
     files.index.add(
       compiler.exportNamedDeclaration({
         exports: config.name,
-        module: `./${config.name}`,
+        module: appendExt(`./${config.name}`),
       }),
     );
   }
@@ -27,14 +28,14 @@ export const generateIndexFile = async ({
     files.index.add(
       compiler.exportNamedDeclaration({
         exports: 'ApiError',
-        module: './core/ApiError',
+        module: appendExt('./core/ApiError'),
       }),
     );
     if (config.services.response === 'response') {
       files.index.add(
         compiler.exportNamedDeclaration({
           exports: { asType: true, name: 'ApiResult' },
-          module: './core/ApiResult',
+          module: appendExt('./core/ApiResult'),
         }),
       );
     }
@@ -42,7 +43,7 @@ export const generateIndexFile = async ({
       files.index.add(
         compiler.exportNamedDeclaration({
           exports: 'BaseHttpRequest',
-          module: './core/BaseHttpRequest',
+          module: appendExt('./core/BaseHttpRequest'),
         }),
       );
     }
@@ -50,14 +51,14 @@ export const generateIndexFile = async ({
       files.index.add(
         compiler.exportNamedDeclaration({
           exports: ['CancelablePromise', 'CancelError'],
-          module: './core/CancelablePromise',
+          module: appendExt('./core/CancelablePromise'),
         }),
       );
     }
     files.index.add(
       compiler.exportNamedDeclaration({
         exports: ['OpenAPI', { asType: true, name: 'OpenAPIConfig' }],
-        module: './core/OpenAPI',
+        module: appendExt('./core/OpenAPI'),
       }),
     );
   }
@@ -73,7 +74,7 @@ export const generateIndexFile = async ({
 
       files.index.add(
         compiler.exportAllDeclaration({
-          module: `./${file.getName(false)}`,
+          module: appendExt(`./${file.getName(false)}`),
         }),
       );
     });
