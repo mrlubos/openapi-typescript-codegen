@@ -499,7 +499,7 @@ const toOperationStatements = (
     return [
       compiler.returnFunctionCall({
         args: [options],
-        name: `(options?.client ?? client).${operation.method.toLocaleLowerCase()}`,
+        name: `(options?.client ?? this.client).${operation.method.toLocaleLowerCase()}`,
         types:
           errorType && responseType
             ? [responseType, errorType, 'ThrowOnError']
@@ -642,7 +642,10 @@ const processService = ({
     const node = compiler.methodDeclaration({
       accessLevel: 'public',
       comment: toOperationComment(operation),
-      isStatic: config.name === undefined && config.client.name !== 'angular',
+      isStatic:
+        !config.services.sdk &&
+        config.name === undefined &&
+        config.client.name !== 'angular',
       name: toOperationName(operation, false),
       parameters: toOperationParamType(client, operation),
       returnType: isStandalone
@@ -689,6 +692,21 @@ const processService = ({
             isReadOnly: true,
             name: 'http',
             type: 'HttpClient',
+          },
+        ],
+      }),
+      ...members,
+    ];
+  } else if (config.services.sdk) {
+    members = [
+      compiler.constructorDeclaration({
+        multiLine: false,
+        parameters: [
+          {
+            accessLevel: 'public',
+            isReadOnly: true,
+            name: 'client',
+            type: 'Client<Request, Response, RequestOptions>',
           },
         ],
       }),
@@ -747,14 +765,25 @@ export const generateServices = async ({
 
   // Import required packages and core files.
   if (isStandalone) {
-    files.services.import({
-      module: clientModulePath(),
-      name: 'createClient',
-    });
-    files.services.import({
-      module: clientModulePath(),
-      name: 'createConfig',
-    });
+    if (config.services.sdk) {
+      files.services.import({
+        module: clientModulePath(),
+        name: 'Client',
+      });
+      files.services.import({
+        module: clientModulePath(),
+        name: 'RequestOptions',
+      });
+    } else {
+      files.services.import({
+        module: clientModulePath(),
+        name: 'createClient',
+      });
+      files.services.import({
+        module: clientModulePath(),
+        name: 'createConfig',
+      });
+    }
     files.services.import({
       asType: true,
       module: clientModulePath(),
@@ -815,7 +844,7 @@ export const generateServices = async ({
   }
 
   // define client first
-  if (isStandalone) {
+  if (isStandalone && !config.services.sdk) {
     const statement = compiler.constVariable({
       exportConst: true,
       expression: compiler.callExpression({
